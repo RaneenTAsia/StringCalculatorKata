@@ -16,7 +16,7 @@ public class StringCalculator
 
         numbersToBeAdded = numbersToBeAdded.Replace(" ", "");
 
-        int[] NumbersToBeAdded=numbersToBeAdded.Split(',').Where(n => n!="").Select(n=>Int32.Parse(n)).ToArray();
+        int[] NumbersToBeAdded=numbersToBeAdded.Split(new char[]{',','\n'}).Where(n => n!="").Select(n=>Int32.Parse(n)).ToArray();
 
         int sum = 0;
         for (int i = 0; i < NumbersToBeAdded.Length; i++)

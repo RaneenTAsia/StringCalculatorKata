@@ -72,9 +72,28 @@ public class StringCalculatorTests
     }
 
     [Fact]
-    public void Add_Null_Input_Exception()
+    public void Add_NullInput_ThrowsException()
     {
        Assert.Throws<ArgumentNullException>(()=>StringCalculator.add(null));
+    }
+
+    [Theory]
+    [InlineData("6\n3,2,3", 14)]
+    public void Add_MultipleNumbersWithNewLines_IgnoreNewLinesReturnSum(string numbers, int expected)
+    {
+        var actual = StringCalculator.add(numbers);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("6\n3,2,3,\n", 14)]
+    [InlineData("6\n3,2,3,\n,", 14)]
+    public void Add_MultipleNumbersWithNewLineFollowedByComma_IgnoreNewLineAndCommaReturnSum(string numbers, int expected)
+    {
+        var actual = StringCalculator.add(numbers);
+
+        Assert.Equal(expected, actual);
     }
 
 }
