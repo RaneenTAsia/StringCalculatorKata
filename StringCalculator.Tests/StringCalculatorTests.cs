@@ -1,3 +1,6 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = Xunit.Assert;
+
 namespace StringCalculator.Tests;
 
 public class StringCalculatorTests
@@ -33,7 +36,7 @@ public class StringCalculatorTests
 
     [Theory]
     [InlineData(" ",0)]
-    public void Add_SpaceInput_Return0(string numbers,int expected)
+    public void Add_SpaceInput_ReturnZero(string numbers,int expected)
     {
                 var actual = StringCalculator.add(numbers);
 
@@ -47,6 +50,31 @@ public class StringCalculatorTests
         var actual = StringCalculator.add(numbers);
 
         Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("6,3,2,3", 14)]
+    public void Add_MultipleNumbers_ReturnSum(string numbers, int expected)
+    {
+        var actual = StringCalculator.add(numbers);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("6, ,3,2,3", 14)]
+    [InlineData("6, 3,2,3", 14)]
+    public void Add_MultipleNumbersWithEmptySpace_ReturnSum(string numbers, int expected)
+    {
+        var actual = StringCalculator.add(numbers);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Add_Null_Input_Exception()
+    {
+       Assert.Throws<ArgumentNullException>(()=>StringCalculator.add(null));
     }
 
 }

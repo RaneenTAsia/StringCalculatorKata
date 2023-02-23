@@ -7,23 +7,23 @@ public class StringCalculator
     {
     }
 
-    public int add(string numbersToBeAdded)
+    public int add(string? numbersToBeAdded)
     {
-        numbersToBeAdded =numbersToBeAdded.Replace(" ", "");
-
-        if (numbersToBeAdded == "")
+        if (numbersToBeAdded == null)
         {
-            return 0;
+            throw new ArgumentNullException();
         }
+
+        numbersToBeAdded = numbersToBeAdded.Replace(" ", "");
 
         int[] NumbersToBeAdded=numbersToBeAdded.Split(',').Where(n => n!="").Select(n=>Int32.Parse(n)).ToArray();
 
-        if(NumbersToBeAdded.Length == 1) 
+        int sum = 0;
+        for (int i = 0; i < NumbersToBeAdded.Length; i++)
         {
-            return NumbersToBeAdded[0];
-
+            sum = sum + NumbersToBeAdded[i];
         }
 
-        return NumbersToBeAdded[0] + NumbersToBeAdded[1];
+        return sum;
     }
 }
