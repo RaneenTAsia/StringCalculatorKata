@@ -20,7 +20,17 @@ public class StringCalculator
 
         int[] NumbersToBeAdded = GetNumbersToBeAdded(numbersString, Delimiters);
 
+        CheckForNegativeInArray(NumbersToBeAdded);
+
         return GetSum(NumbersToBeAdded);
+    }
+
+    private static void CheckForNegativeInArray(int[] NumbersToBeAdded)
+    {
+        if (NumbersToBeAdded.Any(n => n < 0))
+        {
+            throw new Exception($"Negatives Not Allowed: {string.Join(",", NumbersToBeAdded.Where(n => n < 0).ToList())}");
+        }
     }
 
     private static int GetSum(int[] NumbersToBeAdded)
