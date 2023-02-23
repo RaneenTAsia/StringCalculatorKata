@@ -7,17 +7,24 @@ public class StringCalculator
     {
     }
 
-    public int add(string? numbersToBeAdded)
+    public int add(string? numbersString)
     {
-        if (numbersToBeAdded == null)
+        if (numbersString == null)
         {
             throw new ArgumentNullException();
         }
 
-        numbersToBeAdded = numbersToBeAdded.Replace(" ", "");
+        numbersString = numbersString.Replace(" ", "");
 
-        int[] NumbersToBeAdded=numbersToBeAdded.Split(new char[]{',','\n'}).Where(n => n!="").Select(n=>Int32.Parse(n)).ToArray();
+        string[] Delimiters = GetDelimiterConfigurations(ref numbersString);
 
+        int[] NumbersToBeAdded = GetNumbersToBeAdded(numbersString, Delimiters);
+
+        return GetSum(NumbersToBeAdded);
+    }
+
+    private static int GetSum(int[] NumbersToBeAdded)
+    {
         int sum = 0;
         for (int i = 0; i < NumbersToBeAdded.Length; i++)
         {
@@ -25,5 +32,36 @@ public class StringCalculator
         }
 
         return sum;
+    }
+
+    private static int[] GetNumbersToBeAdded(string numbersString, string[] Delimiters)
+    {
+        return numbersString.Split(Delimiters, StringSplitOptions.None).Where(n => n != "").Select(n => Int32.Parse(n)).ToArray();
+    }
+
+    private string[] GetDelimiterConfigurations(ref string numbersString)
+    {
+        string[] Delimiters;
+
+        int CustomDelimiterBeginningIndicatorIndex = numbersString.IndexOf("//");
+
+        if (CustomDelimiterBeginningIndicatorIndex != -1)
+        {
+            int CustomDelimiterEndingIndicatorIndex = numbersString.Substring(CustomDelimiterBeginningIndicatorIndex).IndexOf("\n");
+
+            Delimiters = GetCustomDelimiters(numbersString, CustomDelimiterBeginningIndicatorIndex, CustomDelimiterEndingIndicatorIndex);
+            numbersString = numbersString.Substring(CustomDelimiterEndingIndicatorIndex + 1);
+        }
+        else
+        {
+            Delimiters = new string[] { "\n", "," };
+        }
+
+        return Delimiters;
+    }
+
+    private string[] GetCustomDelimiters(String numberString, int CustomDelimiterBeginningIndicatorIndex, int CustomDelimiterEndingIndicatorIndex)
+    {
+        return numberString.Substring(CustomDelimiterBeginningIndicatorIndex + 2, CustomDelimiterEndingIndicatorIndex - CustomDelimiterBeginningIndicatorIndex - 2).Split("|");
     }
 }

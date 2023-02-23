@@ -96,4 +96,14 @@ public class StringCalculatorTests
         Assert.Equal(expected, actual);
     }
 
+    [Theory]
+    [InlineData("//;\n6;3;2;3;", 14)]
+    [InlineData("//;|,\n6;3;2,3;", 14)]
+    public void Add_MultipleNumbersWithCustomDelimiter_IgnoreNewLineAndCommaReturnSum(string numbers, int expected)
+    {
+        var actual = StringCalculator.add(numbers);
+
+        Assert.Equal(expected, actual);
+    }
+
 }
