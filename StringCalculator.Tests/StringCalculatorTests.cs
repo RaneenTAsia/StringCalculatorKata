@@ -5,13 +5,14 @@ using Assert = Xunit.Assert;
 namespace StringCalculator.Tests;
 public class StringCalculatorTests 
 {
-    private readonly StringCalculator StringCalculator = new StringCalculator();
+    private readonly StringCalculator StringCalculator;
 
     private readonly ITestOutputHelper _output;
 
     public StringCalculatorTests(ITestOutputHelper output)
     {
         _output = output;
+        StringCalculator = new StringCalculator();
     }
 
     [Theory]
@@ -122,5 +123,15 @@ public class StringCalculatorTests
 
         var Exception = Assert.Throws<Exception>(() => StringCalculator.add(numbers));
         _output.WriteLine(Exception.Message);
+    }
+
+    [Theory]
+    [InlineData("6,3\n1001", 9)]
+    [InlineData("20000,6,3\n1001,1003", 9)]
+    public void Add_LargeNumbersGreaterThan1000_IgnoreLargeNumbersReturnSum(string numbers, int expected)
+    {
+        var actual = StringCalculator.add(numbers);
+
+        Assert.Equal(expected, actual);
     }
 }

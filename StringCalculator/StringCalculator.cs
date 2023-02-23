@@ -20,17 +20,7 @@ public class StringCalculator
 
         int[] NumbersToBeAdded = GetNumbersToBeAdded(numbersString, Delimiters);
 
-        CheckForNegativeInArray(NumbersToBeAdded);
-
         return GetSum(NumbersToBeAdded);
-    }
-
-    private static void CheckForNegativeInArray(int[] NumbersToBeAdded)
-    {
-        if (NumbersToBeAdded.Any(n => n < 0))
-        {
-            throw new Exception($"Negatives Not Allowed: {string.Join(",", NumbersToBeAdded.Where(n => n < 0).ToList())}");
-        }
     }
 
     private static int GetSum(int[] NumbersToBeAdded)
@@ -46,7 +36,31 @@ public class StringCalculator
 
     private static int[] GetNumbersToBeAdded(string numbersString, string[] Delimiters)
     {
+        int[] NumbersToBeAdded = GetNumbersFromInput(numbersString, Delimiters);
+
+        CheckForNegativeInArray(NumbersToBeAdded);
+
+        NumbersToBeAdded = RemoveLargeNumbers(NumbersToBeAdded);
+
+        return NumbersToBeAdded;
+    }
+
+    private static int[] GetNumbersFromInput(string numbersString, string[] Delimiters)
+    {
         return numbersString.Split(Delimiters, StringSplitOptions.None).Where(n => n != "").Select(n => Int32.Parse(n)).ToArray();
+    }
+
+    private static void CheckForNegativeInArray(int[] NumbersToBeAdded)
+    {
+        if (NumbersToBeAdded.Any(n => n < 0))
+        {
+            throw new Exception($"Negatives Not Allowed: {string.Join(",", NumbersToBeAdded.Where(n => n < 0).ToList())}");
+        }
+    }
+
+    private static int[] RemoveLargeNumbers(int[] NumbersToBeAdded)
+    {
+        return NumbersToBeAdded.Where(val => val < 1001).ToArray();
     }
 
     private string[] GetDelimiterConfigurations(ref string numbersString)
